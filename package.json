@@ -1,0 +1,11 @@
+{
+    "name": "vthacks-challenges",
+    "main": "server.js",
+    "dependencies": {
+        "body-parser": "^1.16.1",
+        "cookie-parser": "^1.4.3",
+        "ejs": "^1.0.0",
+        "express": "^4.6.1",
+        "node-uuid": "^1.4.7"
+    }
+}
