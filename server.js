@@ -8,6 +8,24 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 
+// Cookie handling logic
+app.use(cookieParser());
+
+// Set UUID if nonexistant
+const uuidgen = require('node-uuid');
+app.use((req, res, next) => {
+    let uuid = req.cookies.uuid;
+
+    if (uuid === undefined) {
+        uuid = uuidgen.v4();
+        res.cookie('uuid', uuid, { maxAge: 900000, httpOnly: true });
+    }
+
+    console.log(`[${req.method}]\t${req.url}\t${uuid}`);
+    res.locals.uuid = uuid;
+    next();
+});
+
 // Host static files
 app.use(express.static(__dirname + '/public'));
 
