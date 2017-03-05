@@ -3,6 +3,16 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+// Connect to the database
+var pgp = require('pg-promise')();
+var cn = {
+    user: 'postgres',
+    password: '1234',
+    host: 'localhost',
+    database: 'challenges',
+};
+var db = pgp(cn);
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
