@@ -39,6 +39,17 @@ app.use((req, res, next) => {
 // Host static files
 app.use(express.static(__dirname + '/public'));
 
+function lineFormat(literals, ...substs) {
+    let interpolation = '';
+
+    for (let i = 0; i < substs.length; i++) {
+        interpolation += literals[i].replace('\n', '')  + substs[i];
+    }
+    interpolation += literals[literals.length - 1];
+
+    return interpolation;
+}
+
 // Start the server
 const server = app.listen(80, () => {
     const host = server.address().address;
