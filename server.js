@@ -36,6 +36,38 @@ app.use((req, res, next) => {
     next();
 });
 
+function checkProblemStatus(uuid, level) {
+    return () => {
+        return db.any(lineFormat `SELECT * FROM records
+                    WHERE uuid=$1 AND level=$2
+                    ORDER BY datetime ASC`,
+                [uuid, level])
+            .then((rows) => {
+
+                let hasSolved = false;
+                let timeSolved;
+                let attempts = 0;
+
+                rows.forEach((row) => {
+                    if (!hasSolved) {
+                        if (row.correct) {
+                            hasSolved = true;
+                            timeSolved = row.datetime;
+                        } else {
+                            attempts++;
+                        }
+                    }
+                });
+
+                return {
+                    hasSolved,
+                    timeSolved,
+                    attempts
+                };
+            })
+        }
+}
+
 // Host static files
 app.use(express.static(__dirname + '/public'));
 
