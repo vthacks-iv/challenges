@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+import { oneLine } from 'common-tags';
 
 // Connect to the database
 var pgp = require('pg-promise')();
@@ -38,7 +39,7 @@ app.use((req, res, next) => {
 
 function checkProblemStatus(uuid, level) {
     return () => {
-        return db.any(lineFormat `SELECT * FROM records
+        return db.any(oneLine `SELECT * FROM records
                     WHERE uuid=$1 AND level=$2
                     ORDER BY datetime ASC`,
                 [uuid, level])
@@ -71,15 +72,9 @@ function checkProblemStatus(uuid, level) {
 // Host static files
 app.use(express.static(__dirname + '/public'));
 
-function lineFormat(literals, ...substs) {
-    let interpolation = '';
 
-    for (let i = 0; i < substs.length; i++) {
-        interpolation += literals[i].replace('\n', '')  + substs[i];
     }
-    interpolation += literals[literals.length - 1];
 
-    return interpolation;
 }
 
 // Start the server
