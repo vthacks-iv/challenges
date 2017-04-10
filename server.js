@@ -77,6 +77,25 @@ app.use(express.static(__dirname + '/public'));
 
 }
 
+// Handle problem submission
+app.post('/submit', (req, res) => {
+    let uuid = req.cookies.uuid;
+    let submission = req.body.submission;
+    let level = req.body.level;
+
+    let {correct, message} = handleProblem(level, submission);
+
+    db.none(oneLine `INSERT INTO records
+                (uuid, datetime, level, submission, correct)
+                VALUES ($1, $2, $3, $4, $5)`,
+            [uuid, new Date(), level, submission, correct]
+        )
+        .then(checkProblemStatus(uuid, level))
+        .then(({hasSolved, timeSolved, attempts}) => {
+            res.send(message);
+        })
+
+});
 // Start the server
 const server = app.listen(80, () => {
     const host = server.address().address;
