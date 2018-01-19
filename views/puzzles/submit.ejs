@@ -1,0 +1,36 @@
+<form method="POST" id="challenge">
+    <input type="text" name="username" id="prompt" size="40"/>
+    <input type="submit" id="submit" value="Submit">
+</form>
+
+<div id="result"><%= msg %></div>
+
+<script type="text/javascript">
+$(function() {
+    $('#challenge').submit(function(e) {
+        $('#result').html('Checking...');
+
+        setTimeout(function(){
+            let submission = $('#prompt').val();
+            if (submission == '') {
+                return;
+            }
+
+            $.ajax({
+                url: '/submit',
+                type: 'POST',
+                cache: false,
+                data: {
+                    submission,
+                    level: <%= level %>
+                },
+                success: function(data) {
+                    console.log(data);
+                    $('#result').html(data);
+                }
+            });
+        }, 500);
+        return false;
+    });
+});
+</script>
