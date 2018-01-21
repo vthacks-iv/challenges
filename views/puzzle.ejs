@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include partials/head %>
+</head>
+<body>
+    <main>
+        <% if (level == 0) { %>
+            <% include puzzles/level-0 %>
+        <% } else if (level == 1) { %>
+            <% include puzzles/level-1 %>
+        <% } else if (level == 2) { %>
+            <% include puzzles/level-2 %>
+        <% } else if (level == 3) { %>
+            <% include puzzles/level-3 %>
+        <% } else if (level == 4) { %>
+            <% include puzzles/level-4 %>
+        <% } %>
+
+        <% if (level != 3) { %>
+            <% include puzzles/submit %>
+        <% } %>
+    </main>
+</body>
+</html>
